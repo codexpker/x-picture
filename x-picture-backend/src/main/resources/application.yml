@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: x-picture-backend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: root
+    password: 1234
+    url: jdbc:mysql://localhost:3306?test
+server:
+  port: 8436
+  servlet:
+    context-path: /api
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted # 全局逻辑删除字段名
+      logic-delete-value: 1 # 逻辑已删除值。可选，默认值为 1
+      logic-not-delete-value: 0 # 逻辑未删除值。可选，默认值为 0
+  configuration:
+    #仅在开发环境开启日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #是否开启下划线到驼峰映射
+    map-underscore-to-camel-case: false
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.xpker.xpicture.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
