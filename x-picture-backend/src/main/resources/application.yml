@@ -1,19 +1,20 @@
+server:
+  port: 8436
+  servlet:
+    context-path: /api
 spring:
   application:
     name: x-picture-backend
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    name: root
+    url: jdbc:mysql://localhost:3306/x_picture
+    username: root
     password: 1234
-    url: jdbc:mysql://localhost:3306?test
-server:
-  port: 8436
-  servlet:
-    context-path: /api
+
 mybatis-plus:
   global-config:
     db-config:
-      logic-delete-field: deleted # 全局逻辑删除字段名
+      logic-delete-field: isDelete # 全局逻辑删除字段名
       logic-delete-value: 1 # 逻辑已删除值。可选，默认值为 1
       logic-not-delete-value: 0 # 逻辑未删除值。可选，默认值为 0
   configuration:

@@ -21,7 +21,7 @@ public class PageRequest{
     /**
      * 搜索字段
      */
-    private String searchField;
+    private String sortField;
     /**
      * 排序方式
      */
