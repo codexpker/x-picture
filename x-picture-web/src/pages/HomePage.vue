@@ -1,12 +1,13 @@
 <template>
   <div id="homePage">
-    {{ msg }}
+    <TheWelcome/>
   </div>
 </template>
 
 <script setup lang="ts">
 
-const msg = "前端初始化完成";
+import TheWelcome from '@/components/TheWelcome.vue'
+
 </script>
 
 <style scoped>

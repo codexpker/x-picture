@@ -10,36 +10,110 @@
         </RouterLink>
       </a-col>
       <a-col flex="auto">
-        <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="MenuClick" />
+        <a-menu
+          v-model:selectedKeys="current"
+          mode="horizontal"
+          :items="menus"
+          @click="doMenuClick"
+        />
       </a-col>
-      <a-col flex="100px">
-        <div v-if="!loginUserStore.loginUser.id" class="user-login-status" href="/user/login">
-          <a-button type="primary">登录</a-button>
-        </div>
-        <div v-else>
-          {{loginUserStore.loginUser.userName ?? '无名'}}
+      <a-col flex="120px">
+        <div class="user-login-status">
+          <div v-if="!loginUserStore.loginUser.id">
+            <a-button type="primary" href="/user/login">登录</a-button>
+          </div>
+          <div v-else>
+            <a-dropdown>
+              <a-space>
+                <a-avatar :src="loginUserStore.loginUser.userAvatar" />
+                {{ loginUserStore.loginUser.userName ?? '无名' }}
+              </a-space>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item @click="doLogout">
+                    <LogoutOutlined />
+                    退出登录
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
+          </div>
         </div>
       </a-col>
     </a-row>
   </div>
 </template>
 <script lang="ts" setup>
-import { h, ref } from 'vue'
-import { MailOutlined } from '@ant-design/icons-vue'
-import { MenuProps } from 'ant-design-vue'
+import { computed, h, ref } from 'vue'
+import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
+import { MenuProps, message } from 'ant-design-vue'
 
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
+import { logout } from '@/api/userController.ts'
 
-const loginUserStore = useLoginUserStore();
+import checkAccess from '@/access/checkAccess.ts'
 
+const router = useRouter()
+const loginUserStore = useLoginUserStore()
+// 获取所有路由
+const routes = router.getRoutes()
+
+// 把路由项转换成菜单项
+const routeItemToMenu = (item: any) => {
+  const isHome = item.path === '/'
+  return {
+    key: item.path,
+    label: item.name,
+    title: item.name,
+    icon: isHome ? h(item.meta?.icon ?? HomeOutlined) : undefined, //仅在主页路径时显示icon
+  }
+}
+
+// 过滤菜单项
+const items = computed(() => {
+  const filtered = routes.filter((item) => {
+    if(item.meta?.hideInMenu) return false
+    return checkAccess(loginUserStore.loginUser, item.meta?.access as string)
+  })
+
+  // 找到主页
+  const homeIndex = filtered.findIndex(item => item.path === '/')
+  if (homeIndex > 0) {
+    // 如果主页不在第一位，则调整到第一位
+    const [homeItem] = filtered.splice(homeIndex, 1)
+    filtered.unshift(homeItem)
+  }
+
+  return filtered.map(routeItemToMenu)
+})
+
+const menus = ref<MenuProps['items']>(items)
+
+/**
+ * 用户注销
+ */
+const doLogout = async () => {
+  const res = await logout()
+  if (res.data.code === 0) {
+    // 清除登录状态
+    loginUserStore.setLoginUser({
+      userName: '未登录',
+    })
+    message.success('退出登录成功')
+    // 跳转登录页
+    await router.push({ path: '/user/login' })
+  } else {
+    message.error('退出登录失败' + res.data.message)
+  }
+}
 
 /**
  * 实现路由跳转
  */
-const router = useRouter()
-const MenuClick = ({ key }: { key: string }) => {
-  console.log(key);
+
+const doMenuClick = ({ key }: { key: string }) => {
+  console.log(key)
   router.push({
     path: key,
   })
@@ -49,22 +123,8 @@ const MenuClick = ({ key }: { key: string }) => {
 const current = ref<string[]>()
 // 监听路由变化,更新当前选中菜单
 router.afterEach((to) => {
-  current.value = [to.path];
+  current.value = [to.path]
 })
-
-const items = ref<MenuProps['items']>([
-  {
-    key: '/',
-    icon: () => h(MailOutlined),
-    label: '主页',
-    title: '主页',
-  },
-  {
-    key: '/about',
-    label: '关于',
-    title: '关于',
-  },
-])
 </script>
 
 <style scoped>

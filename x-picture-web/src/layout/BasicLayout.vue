@@ -1,5 +1,5 @@
 <template>
-  <div id="BasicLayout">
+  <div id="basicLayout">
     <a-layout>
       <a-layout-header class="header">
         <NavBar />
@@ -18,7 +18,7 @@ import NavBar from '@/components/NavBar.vue'
 </script>
 
 <style scoped>
-#BasicLayout .footer {
+#basicLayout .footer {
   position: fixed;
   bottom: 0;
   text-align: center;
@@ -28,16 +28,22 @@ import NavBar from '@/components/NavBar.vue'
   background: #efefef;
 }
 
-#BasicLayout .content {
+#basicLayout .content {
   background: linear-gradient(to right, #fefefe, #fff);
-  margin-bottom: 28px;
   padding: 20px;
+  margin-bottom: 30px;
 }
 
-#BasicLayout .header {
+#basicLayout .header {
   background: white;
   color: unset;
   margin-bottom: 16px;
   padding-inline: 20px;
+}
+
+#basicLayout{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>
