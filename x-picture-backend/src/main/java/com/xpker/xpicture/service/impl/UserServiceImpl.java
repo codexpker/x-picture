@@ -15,8 +15,8 @@ import com.xpker.xpicture.exception.ThrowUtils;
 import com.xpker.xpicture.model.dto.user.UserQueryRequest;
 import com.xpker.xpicture.model.dto.user.UserRegisterRequest;
 import com.xpker.xpicture.model.entity.User;
-import com.xpker.xpicture.model.vo.LoginUserVO;
-import com.xpker.xpicture.model.vo.UserVO;
+import com.xpker.xpicture.model.vo.user.LoginUserVO;
+import com.xpker.xpicture.model.vo.user.UserVO;
 import com.xpker.xpicture.service.UserService;
 import com.xpker.xpicture.mapper.UserMapper;
 import jakarta.annotation.Resource;
@@ -202,6 +202,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     public String getEncodePassword(String password) {
         return BCrypt.hashpw(password);
+    }
+
+    /**
+     * 判断用户是否为管理员
+     *
+     * @param user 用户
+     * @return
+     */
+    @Override
+    public Boolean isAdmin(User user) {
+        return user != null && UserConstant.ADMIN_ROLE.equals(user.getUserRole());
     }
 
     /**

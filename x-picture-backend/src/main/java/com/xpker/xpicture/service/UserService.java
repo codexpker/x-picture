@@ -5,8 +5,8 @@ import com.xpker.xpicture.model.dto.user.UserQueryRequest;
 import com.xpker.xpicture.model.dto.user.UserRegisterRequest;
 import com.xpker.xpicture.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xpker.xpicture.model.vo.LoginUserVO;
-import com.xpker.xpicture.model.vo.UserVO;
+import com.xpker.xpicture.model.vo.user.LoginUserVO;
+import com.xpker.xpicture.model.vo.user.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
@@ -83,4 +83,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     public String getEncodePassword(String password);
+
+    /**
+     * 是否是管理员
+     *
+     * @param user 用户
+     * @return
+     */
+    Boolean isAdmin(User user);
 }

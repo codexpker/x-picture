@@ -1,4 +1,4 @@
-package com.xpker.xpicture.model.vo;
+package com.xpker.xpicture.model.vo.user;
 
 
 import lombok.Data;
@@ -7,10 +7,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 已登录用户视图（脱敏）
+ * 用户视图（脱敏）
  */
 @Data
-public class LoginUserVO implements Serializable {
+public class UserVO implements Serializable {
     /**
      * id
      */
@@ -41,23 +41,10 @@ public class LoginUserVO implements Serializable {
      */
     private String userRole;
 
-
-    /**
-     * 编辑时间
-     */
-    private Date editTime;
-
-
     /**
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
 
     private static final long serialVersionUID = 1L;
 }

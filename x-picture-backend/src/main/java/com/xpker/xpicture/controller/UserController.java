@@ -1,6 +1,5 @@
 package com.xpker.xpicture.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xpker.xpicture.annotation.AuthCheck;
 import com.xpker.xpicture.common.BaseResponse;
@@ -11,8 +10,8 @@ import com.xpker.xpicture.exception.ErrorCode;
 import com.xpker.xpicture.exception.ThrowUtils;
 import com.xpker.xpicture.model.dto.user.*;
 import com.xpker.xpicture.model.entity.User;
-import com.xpker.xpicture.model.vo.LoginUserVO;
-import com.xpker.xpicture.model.vo.UserVO;
+import com.xpker.xpicture.model.vo.user.LoginUserVO;
+import com.xpker.xpicture.model.vo.user.UserVO;
 import com.xpker.xpicture.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
