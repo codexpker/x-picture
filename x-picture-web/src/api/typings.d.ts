@@ -17,9 +17,39 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePagePicture = {
+    code?: number
+    data?: PagePicture
+    message?: string
+  }
+
+  type BaseResponsePagePictureVO = {
+    code?: number
+    data?: PagePictureVO
+    message?: string
+  }
+
   type BaseResponsePageUserVO = {
     code?: number
     data?: PageUserVO
+    message?: string
+  }
+
+  type BaseResponsePicture = {
+    code?: number
+    data?: Picture
+    message?: string
+  }
+
+  type BaseResponsePictureTagCategory = {
+    code?: number
+    data?: PictureTagCategory
+    message?: string
+  }
+
+  type BaseResponsePictureVO = {
+    code?: number
+    data?: PictureVO
     message?: string
   }
 
@@ -43,6 +73,14 @@ declare namespace API {
 
   type DeleteRequest = {
     id?: number
+  }
+
+  type getPictureByIdParams = {
+    id: number
+  }
+
+  type getPictureVOByIdParams = {
+    id: number
   }
 
   type getUserByIdParams = {
@@ -70,6 +108,34 @@ declare namespace API {
     asc?: boolean
   }
 
+  type PagePicture = {
+    records?: Picture[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PagePicture
+    searchCount?: PagePicture
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
+  type PagePictureVO = {
+    records?: PictureVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PagePictureVO
+    searchCount?: PagePictureVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
   type PageUserVO = {
     records?: UserVO[]
     total?: number
@@ -82,6 +148,96 @@ declare namespace API {
     maxLimit?: number
     countId?: string
     pages?: number
+  }
+
+  type Picture = {
+    id?: number
+    url?: string
+    name?: string
+    introduction?: string
+    category?: string
+    tags?: string
+    picSize?: number
+    picWidth?: number
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
+    userId?: number
+    createTime?: string
+    editTime?: string
+    updateTime?: string
+    isDelete?: number
+  }
+
+  type PictureEditRequest = {
+    id?: number
+    name?: string
+    introduction?: string
+    category?: string
+    tags?: string[]
+  }
+
+  type PictureQueryRequest = {
+    current?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    id?: number
+    name?: string
+    introduction?: string
+    category?: string
+    tags?: string[]
+    picSize?: number
+    picWidth?: number
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
+    searchText?: string
+    userId?: number
+  }
+
+  type PictureTagCategory = {
+    tagList?: string[]
+    categoryList?: string[]
+  }
+
+  type PictureUpdateRequest = {
+    id?: number
+    name?: string
+    introduction?: string
+    category?: string
+    tags?: string[]
+  }
+
+  type PictureUploadRequest = {
+    id?: number
+  }
+
+  type PictureVO = {
+    id?: number
+    url?: string
+    name?: string
+    introduction?: string
+    category?: string
+    tags?: Record<string, any>[]
+    picSize?: number
+    picWidth?: number
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
+    userId?: number
+    createTime?: string
+    editTime?: string
+    updateTime?: string
+    userVO?: UserVO
+  }
+
+  type testDownloadFileParams = {
+    filepath: string
+  }
+
+  type uploadPictureParams = {
+    pictureUploadRequest: PictureUploadRequest
   }
 
   type User = {

@@ -23,6 +23,7 @@ import com.xpker.xpicture.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,16 +48,16 @@ public class PictureController {
      * @return
      */
 
-    @PostMapping("/upload")
+    @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<PictureVO> uploadPicture(@RequestPart("file") MultipartFile multipartFile,
-                                                 PictureUploadRequest pictureUploadRequest,
-                                                 HttpServletRequest request) {
+    public BaseResponse<PictureVO> uploadPicture(
+            @RequestPart("file") MultipartFile multipartFile,
+            @ModelAttribute PictureUploadRequest pictureUploadRequest,
+            HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         PictureVO pictureVO = pictureService.uploadPicture(multipartFile, pictureUploadRequest, loginUser);
         return ResultUtils.success(pictureVO);
     }
-
     /**
      * 删除图片
      */
@@ -121,12 +122,12 @@ public class PictureController {
      * '根据id获取图片（封装类）
      */
     @GetMapping("/get/vo")
-    public BaseResponse<PictureVO> getPictureVOById(Long id){
+    public BaseResponse<PictureVO> getPictureVOById(Long id, HttpServletRequest request){
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
         // 查询数据库
         Picture picture = pictureService.getById(id);
         ThrowUtils.throwIf(picture == null , ErrorCode.NOT_FOUND_ERROR);
-        return ResultUtils.success(PictureVO.objToVo(picture));
+        return ResultUtils.success(pictureService.getPictureVO(picture, request));
     }
 
     /**
@@ -179,7 +180,7 @@ public class PictureController {
         Picture oldPicture = pictureService.getById(picture.getId());
         ThrowUtils.throwIf(oldPicture == null , ErrorCode.NOT_FOUND_ERROR);
         // 仅管理员和本人可编辑
-        if(!picture.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)){
+        if(!oldPicture.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)){
             throw new BusinessException(ErrorCode.NOT_AUTH_ERROR);
         }
         // 操作数据库

@@ -5,6 +5,9 @@ import UserLoginPage from '@/pages/user/UserLoginPage.vue'
 import HomePage from '@/pages/HomePage.vue'
 import Access_Enum from '@/access/accessEnum.ts'
 import NoAuthPage from '@/pages/NoAuthPage.vue'
+import AddPicturePage from '@/pages/picture/AddPicturePage.vue'
+import PictureManagePage from '@/pages/picture/PictureManagePage.vue'
+import PictureDetailPage from '@/pages/picture/PictureDetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,33 +21,58 @@ const router = createRouter({
       path: '/user/login',
       name: '用户登录',
       component: UserLoginPage,
-      meta:{
+      meta: {
         hideInMenu: true,
-      }
+      },
     },
     {
       path: '/user/register',
       name: '用户注册',
       component: UserRegisterPage,
-      meta:{
+      meta: {
         hideInMenu: true,
-      }
+      },
     },
     {
       path: '/admin/userManage',
       name: '用户管理',
       component: UserManagePage,
-      meta:{
+      meta: {
         access: Access_Enum.ADMIN,
-      }
+      },
+    },
+    {
+      path: '/add_picture',
+      name: '创建图片',
+      component: AddPicturePage,
+      meta: {
+        access: Access_Enum.USER,
+      },
+    },
+    {
+      path: '/admin/pictureManage',
+      name: '图片管理',
+      component: PictureManagePage,
+      meta: {
+        access: Access_Enum.ADMIN,
+      },
+    },
+    {
+      path: '/picture/:id',
+      name: '图片详情',
+      component: PictureDetailPage,
+      props: true,
+      meta: {
+        hideInMenu: true,
+      },
     },
     {
       path: '/noAuth',
       name: '无权限',
       component: NoAuthPage,
-      meta:{
+      meta: {
         hideInMenu: true,
-      }
+      },
     },
   ],
 })

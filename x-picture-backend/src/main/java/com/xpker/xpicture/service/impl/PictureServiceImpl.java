@@ -22,6 +22,7 @@ import com.xpker.xpicture.mapper.PictureMapper;
 import com.xpker.xpicture.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  * @description 针对表【picture(图片)】的数据库操作Service实现
  * @createDate 2025-07-10 11:23:01
  */
+@Slf4j
 @Service
 public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         implements PictureService {
@@ -174,7 +176,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 将对象 -> 包装类
         List<PictureVO> pictureVOList = pictureList.stream().map(PictureVO::objToVo).toList();
         // 关联用户信息
-        Set<Long> userIdSet = pictureList.stream().map(Picture::getId).collect(Collectors.toSet());
+        Set<Long> userIdSet = pictureList.stream().map(Picture::getUserId).collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream().collect(Collectors.groupingBy(User::getId));
         // 填充信息
         pictureVOList.forEach(pictureVO -> {
