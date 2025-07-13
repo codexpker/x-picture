@@ -36,7 +36,7 @@
       :loading="loading"
     >
       <template #renderItem="{ item: picture }">
-        <a-list-item>
+        <a-list-item style="padding: 0">
           <a-card hoverable style="width: 240px" @click="doClickPicture(picture)">
             <template #cover>
               <img

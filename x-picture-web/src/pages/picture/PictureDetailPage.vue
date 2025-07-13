@@ -51,7 +51,7 @@
             <a-button type="primary" @click="doDownload">
               免费下载
               <template #icon>
-                <DownloadOutlined/>
+                <DownloadOutlined />
               </template>
             </a-button>
             <a-button v-if="canEdit" @click="doEdit" type="default">
@@ -118,7 +118,6 @@ const router = useRouter()
 
 //编辑
 const doEdit = () => {
-  console.log(picture.value.id)
   router.push({
     path: '/add_picture',
     query: {
@@ -130,20 +129,19 @@ const doEdit = () => {
 //删除
 const doDelete = async () => {
   const id = picture.value.id
-  if(!id){
+  if (!id) {
     return
   }
   const res = await deletePicture({
-    id: id
+    id: id,
   })
-  if(res.data.code === 0) {
+  if (res.data.code === 0) {
     message.success('删除成功')
     await router.push({ path: '/' })
-  }else{
+  } else {
     message.error('删除失败')
   }
 }
-
 
 // 下载
 const doDownload = () => {

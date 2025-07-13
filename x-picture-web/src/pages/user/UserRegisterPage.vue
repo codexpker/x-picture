@@ -4,7 +4,7 @@
     <div class="desc">企业级智能协同云图库</div>
     <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit">
       <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
-        <a-input v-model:value="formState.userAccount" />
+        <a-input v-model:value="formState.userAccount" placeholder="请输入账号"/>
       </a-form-item>
 
       <a-form-item
@@ -14,7 +14,7 @@
           { min: 8, max: 16, message: '密码长度在8-16位之间' },
         ]"
       >
-        <a-input-password v-model:value="formState.userPassword" />
+        <a-input-password v-model:value="formState.userPassword" placeholder="请输入密码"/>
       </a-form-item>
 
       <a-form-item
@@ -24,7 +24,7 @@
           { min: 8, max: 16, message: '密码长度在8-16位之间' },
         ]"
       >
-        <a-input-password v-model:value="formState.checkPassword" />
+        <a-input-password v-model:value="formState.checkPassword" placeholder="请确认密码" />
       </a-form-item>
 
       <div class="tips">
@@ -88,6 +88,7 @@ const formState = reactive<API.UserRegisterRequest>({
 #userRegisterPage .title {
   text-align: center;
   margin-bottom: 16px;
+  margin-top: 100px;
 }
 
 #userRegisterPage .desc {
