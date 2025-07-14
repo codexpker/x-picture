@@ -12,6 +12,9 @@ import com.xpker.xpicture.exception.BusinessException;
 import com.xpker.xpicture.exception.ErrorCode;
 import com.xpker.xpicture.exception.ThrowUtils;
 import com.xpker.xpicture.manager.FileManager;
+import com.xpker.xpicture.manager.upload.FilePictureUpload;
+import com.xpker.xpicture.manager.upload.PictureUploadTemplate;
+import com.xpker.xpicture.manager.upload.UrlPictureUpload;
 import com.xpker.xpicture.model.dto.file.UploadPictureResult;
 import com.xpker.xpicture.model.dto.picture.PictureQueryRequest;
 import com.xpker.xpicture.model.dto.picture.PictureReviewRequest;
@@ -50,20 +53,25 @@ import static net.sf.jsqlparser.util.validation.metadata.MetadataContext.exists;
 public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         implements PictureService {
 
+//    @Resource
+//    private FileManager fileManager;
     @Resource
-    private FileManager fileManager;
-    @Autowired
+    private FilePictureUpload filePictureUpload;
+    @Resource
+    private UrlPictureUpload urlPictureUpload;
+    @Resource
     private UserService userService;
 
     /**
      * 上传图片
-     * @param multipartFile        文件
+     * @param inputSource     文件源
      * @param pictureUploadRequest 文件上传请求
      * @param loginUser            当前用户
      * @return
      */
     @Override
-    public PictureVO uploadPicture(MultipartFile multipartFile, PictureUploadRequest pictureUploadRequest, User loginUser) {
+    public PictureVO uploadPicture(Object inputSource, PictureUploadRequest pictureUploadRequest, User loginUser) {
+        ThrowUtils.throwIf(inputSource == null, ErrorCode.PARAMS_ERROR, "图片为空");
         ThrowUtils.throwIf(loginUser == null, ErrorCode.NOT_AUTH_ERROR);
         // 判断是新增图片还是修改图片
         Long pictureId = null;
@@ -82,7 +90,12 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 上传图片得到信息
         // 按照用户id划分目录
         String uploadPathPrefix = String.format("public/%s", loginUser.getId());
-        UploadPictureResult uploadPictureResult = fileManager.uploadPicture(multipartFile, uploadPathPrefix);
+        // 根据inputSource类型区分上传方法
+        PictureUploadTemplate pictureUploadTemplate = filePictureUpload;
+        if(inputSource instanceof String){
+            pictureUploadTemplate = urlPictureUpload;
+        }
+        UploadPictureResult uploadPictureResult = pictureUploadTemplate.uploadPicture(inputSource, uploadPathPrefix);
         // 将上传图片结果传入图片实体类
         Picture picture = new Picture();
         picture.setUrl(uploadPictureResult.getUrl());

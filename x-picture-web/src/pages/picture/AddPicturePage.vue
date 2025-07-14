@@ -1,8 +1,20 @@
 <template>
   <div id="addPicturePage">
     <h2 style="margin-bottom: 16px">{{ route.query.id ? '修改图片' : '创建图片' }}</h2>
+
     <!-- 图片上传组件 -->
-    <PictureUpload :picture="picture" :onSuccess="onSuccess" />
+    <a-tabs v-model:activeKey="uploadType">
+      <a-tab-pane key="file" tab="文件上传">
+        <!-- 文件上传组件 -->
+        <PictureUpload :picture="picture" :onSuccess="onSuccess" />
+      </a-tab-pane>
+      <a-tab-pane key="url" tab="URL 上传" force-render>
+        <!-- URL上传组件 -->
+        <UrlPictureUpload :picture="picture" :OnSuccess="onSuccess" />
+      </a-tab-pane>
+    </a-tabs>
+
+
     <!-- 图片信息表单 -->
     <a-form
       v-if="picture"
@@ -56,11 +68,14 @@ import { onMounted, reactive, ref } from 'vue'
 import { editPicture, getPictureVoById, listPictureTagCategory } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
 import { useRoute, useRouter } from 'vue-router'
+import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
 const router = useRouter()
 
+
+const uploadType = ref<'file' | 'url'>('file')
 /**
  * 上传成功后，更新图片
  * @param newPicture

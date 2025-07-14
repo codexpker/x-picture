@@ -224,6 +224,7 @@ declare namespace API {
 
   type PictureUploadRequest = {
     id?: number
+    fileUrl?: string
   }
 
   type PictureVO = {
@@ -280,8 +281,8 @@ declare namespace API {
   }
 
   type UserLoginRequest = {
-    userPassword?: string
     userAccount?: string
+    userPassword?: string
   }
 
   type UserQueryRequest = {
