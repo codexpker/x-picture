@@ -3,7 +3,7 @@ import { message } from 'ant-design-vue'
 
 const myAxios = axios.create({
   baseURL: 'http://localhost:8436/api',
-  timeout: 60000,
+  timeout: 120000,
   //是否携带Cookie
   withCredentials: true,
 });

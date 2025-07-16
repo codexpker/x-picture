@@ -14,7 +14,6 @@
       </a-tab-pane>
     </a-tabs>
 
-
     <!-- 图片信息表单 -->
     <a-form
       v-if="picture"
@@ -34,24 +33,24 @@
           allow-clear
         >
         </a-textarea>
-        <a-form-item name="category" label="分类">
-          <a-auto-complete
-            v-model:value="pictureForm.category"
-            placeholder="输入分类"
-            :options="categoryOptions"
-            allow-clear
-          >
-          </a-auto-complete>
-        </a-form-item>
-        <a-form-item name="tags" label="标签">
-          <a-select
-            v-model:value="pictureForm.tags"
-            mode="tags"
-            :options="tagOptions"
-            placeholder="请输入标签"
-            allow-clear
-          ></a-select>
-        </a-form-item>
+      </a-form-item>
+      <a-form-item name="category" label="分类">
+        <a-auto-complete
+          v-model:value="pictureForm.category"
+          placeholder="输入分类"
+          :options="categoryOptions"
+          allow-clear
+        >
+        </a-auto-complete>
+      </a-form-item>
+      <a-form-item name="tags" label="标签">
+        <a-select
+          v-model:value="pictureForm.tags"
+          mode="tags"
+          :options="tagOptions"
+          placeholder="请输入标签"
+          allow-clear
+        ></a-select>
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit" style="width: 100%"
@@ -73,7 +72,6 @@ import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
 const router = useRouter()
-
 
 const uploadType = ref<'file' | 'url'>('file')
 /**

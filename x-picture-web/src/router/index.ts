@@ -8,6 +8,7 @@ import NoAuthPage from '@/pages/NoAuthPage.vue'
 import AddPicturePage from '@/pages/picture/AddPicturePage.vue'
 import PictureManagePage from '@/pages/picture/PictureManagePage.vue'
 import PictureDetailPage from '@/pages/picture/PictureDetailPage.vue'
+import AddPictureBatchPage from '@/pages/picture/AddPictureBatchPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,15 @@ const router = createRouter({
       props: true,
       meta: {
         hideInMenu: true,
+      },
+    },
+    {
+      path: '/add_picture/batch',
+      name: '批量创建图片',
+      component: AddPictureBatchPage,
+      meta: {
+        hideInMenu: true,
+        access:  Access_Enum.ADMIN,
       },
     },
     {
