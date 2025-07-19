@@ -76,6 +76,10 @@ public class Picture implements Serializable {
      */
     private Long userId;
 
+    /**
+     * 缩略图
+     */
+    private String thumbnailUrl;
 
     /**
      * 审核状态：0-待审核; 1-通过; 2-拒绝
@@ -111,6 +115,8 @@ public class Picture implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+
+
 
     /**
      * 是否删除

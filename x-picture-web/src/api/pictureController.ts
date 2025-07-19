@@ -86,6 +86,21 @@ export async function listPictureVoByPage(
   })
 }
 
+/** 此处后端没有提供注释 POST /picture/list/page/vo/cache */
+export async function listPictureVoByPageWithCache(
+  body: API.PictureQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePagePictureVO>('/picture/list/page/vo/cache', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 此处后端没有提供注释 POST /picture/review */
 export async function doPictureReview(
   body: API.PictureReviewRequest,

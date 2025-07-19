@@ -169,6 +169,7 @@ declare namespace API {
     picScale?: number
     picFormat?: string
     userId?: number
+    thumbnailUrl?: string
     reviewStatus?: number
     reviewMessage?: string
     reviewerId?: number
@@ -257,6 +258,7 @@ declare namespace API {
     picScale?: number
     picFormat?: string
     userId?: number
+    thumbnailUrl?: string
     createTime?: string
     editTime?: string
     updateTime?: string
@@ -298,8 +300,8 @@ declare namespace API {
   }
 
   type UserLoginRequest = {
-    userPassword?: string
     userAccount?: string
+    userPassword?: string
   }
 
   type UserQueryRequest = {

@@ -14,6 +14,7 @@ import com.xpker.xpicture.constant.UserConstant;
 import com.xpker.xpicture.exception.BusinessException;
 import com.xpker.xpicture.exception.ErrorCode;
 import com.xpker.xpicture.exception.ThrowUtils;
+import com.xpker.xpicture.manager.CosManager;
 import com.xpker.xpicture.manager.FileManager;
 import com.xpker.xpicture.manager.upload.FilePictureUpload;
 import com.xpker.xpicture.manager.upload.PictureUploadTemplate;
@@ -40,10 +41,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,6 +71,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
     private UrlPictureUpload urlPictureUpload;
     @Resource
     private UserService userService;
+    @Resource
+    private CosManager cosManager;
 
     /**
      * 上传图片
@@ -106,6 +112,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 将上传图片结果传入图片实体类
         Picture picture = new Picture();
         picture.setUrl(uploadPictureResult.getUrl());
+        picture.setThumbnailUrl(uploadPictureResult.getThumbnailUrl());
         String picName=  uploadPictureResult.getPicName();
         // 可以接收前端传送过来的图片名称(批量抓取时使用)
         if(pictureUploadRequest != null && StrUtil.isNotBlank(pictureUploadRequest.getPicName())) {
@@ -121,7 +128,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         if(StrUtil.isNotBlank(pictureUploadRequest.getCategory())){
             picture.setCategory(JSONUtil.toJsonStr(pictureUploadRequest.getCategory()));
         }
-        picture.setCategory(pictureUploadRequest.getCategory());
         picture.setName(picName);
         picture.setPicSize(uploadPictureResult.getPicSize());
         picture.setPicWidth(uploadPictureResult.getPicWidth());
@@ -145,7 +151,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
     /**
      * 拼接条件查询构造器
-     *
+     *re
      * @param pictureQueryRequest
      * @return
      */
@@ -167,6 +173,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         String picFormat = pictureQueryRequest.getPicFormat();
         String searchText = pictureQueryRequest.getSearchText();
         Long userId = pictureQueryRequest.getUserId();
+        // 填充审核信息
         Integer reviewStatus = pictureQueryRequest.getReviewStatus();
         String reviewMessage = pictureQueryRequest.getReviewMessage();
         Long reviewerId = pictureQueryRequest.getReviewerId();
@@ -414,6 +421,34 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             }
         }
         return uploadCount;
+    }
+
+    @Async
+    @Override
+    public void clearPictureFile(Picture oldPicture) {
+        if (oldPicture == null) {
+            return;
+        }
+        // 判断该图片是否被多条记录引用
+        String picUrl = oldPicture.getUrl();
+        Long count = this.lambdaQuery().eq(Picture::getUrl, picUrl).count();
+        // 有不止一条记录用到了该图片，不清理
+        if(count > 1){
+            return;
+        }
+        // 从url中取出相对路径
+        try {
+            String path = new URL(picUrl).getPath();
+            // 调用方法删除图片
+            cosManager.deleteObject(path);
+            // 删除缩略图
+            String thumbnailUrl = oldPicture.getThumbnailUrl();
+            if(StrUtil.isNotBlank(thumbnailUrl)){
+                cosManager.deleteObject(thumbnailUrl);
+            }
+        } catch (MalformedURLException e) {
+            log.info("picture delete error",e);
+        }
     }
 }
 
