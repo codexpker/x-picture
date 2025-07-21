@@ -77,6 +77,11 @@ public class Picture implements Serializable {
     private Long userId;
 
     /**
+     * 空间id
+     */
+    private Long spaceId;
+
+    /**
      * 缩略图
      */
     private String thumbnailUrl;

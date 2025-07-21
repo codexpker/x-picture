@@ -17,6 +17,7 @@
         <result property="picScale" column="picScale"/>
         <result property="picFormat" column="picFormat"/>
         <result property="userId" column="userId"/>
+        <result property="spaceId" column="spaceId"/>
         <result property="thumbnailUrl" column="thumbnailUrl"/>
         <result property="reviewStatus" column="reviewStatus"/>
         <result property="reviewMessage" column="reviewMessage"/>
@@ -32,7 +33,7 @@
         id
         ,url,name,introduction,category,tags,
         picSize,picWidth,picHeight,picScale,picFormat,
-        userId,thumbnailUrl,reviewStatus,reviewMessage,reviewMessage,
+        userId,spaceId,thumbnailUrl,reviewStatus,reviewMessage,reviewMessage,
         reviewId,reviewTime,createTime,editTime,updateTime,isDelete
     </sql>
 </mapper>

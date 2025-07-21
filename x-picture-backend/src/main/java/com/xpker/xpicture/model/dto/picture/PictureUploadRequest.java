@@ -34,5 +34,10 @@ public class PictureUploadRequest implements Serializable {
      * 标签（批量抓取可指定默认标签）
      */
     private List<String> tags;
+
+    /**
+     * 空间id
+     */
+    private Long spaceId;
     private static final long serialVersionUID = 1L;
 }

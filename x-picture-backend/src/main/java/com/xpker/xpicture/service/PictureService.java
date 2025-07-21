@@ -2,10 +2,7 @@ package com.xpker.xpicture.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xpker.xpicture.model.dto.picture.PictureQueryRequest;
-import com.xpker.xpicture.model.dto.picture.PictureReviewRequest;
-import com.xpker.xpicture.model.dto.picture.PictureUploadByBatchRequest;
-import com.xpker.xpicture.model.dto.picture.PictureUploadRequest;
+import com.xpker.xpicture.model.dto.picture.*;
 import com.xpker.xpicture.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xpker.xpicture.model.entity.User;
@@ -85,4 +82,18 @@ public interface PictureService extends IService<Picture> {
      * @param oldPicture
      */
     void clearPictureFile(Picture oldPicture);
+
+    /**
+     * 检查是否有编辑或删除图片权限
+     * @param picture
+     * @param loginUser
+     */
+    void checkPictureAuth(Picture picture, User loginUser);
+
+    /**
+     * 删除图片
+     */
+    void deletePicture(long pictureId, User loginUser);
+
+    void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
 }
