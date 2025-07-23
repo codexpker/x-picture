@@ -122,6 +122,7 @@ const doEdit = () => {
     path: '/add_picture',
     query: {
       id: picture.value.id,
+      spaceId: picture.value.spaceId,
     },
   })
 }

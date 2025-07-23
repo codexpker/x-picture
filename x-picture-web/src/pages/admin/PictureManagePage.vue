@@ -205,7 +205,7 @@ const columns = [
 
 // 定义数据
 // ref一般用于普通的数据，变量等，一般是监控整体更新
-const dataList = ref<API.Picture>([])
+const dataList = ref<API.Picture[]>([])
 // 数据总目
 const total = ref(0)
 // 搜索条件
@@ -222,6 +222,7 @@ const fetchData = async () => {
   //searchParams是响应式变量，传值的时候展开再传
   const res = await listPictureByPage({
     ...searchParams,
+    nullSpaceId: true,
   })
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data.records ?? []

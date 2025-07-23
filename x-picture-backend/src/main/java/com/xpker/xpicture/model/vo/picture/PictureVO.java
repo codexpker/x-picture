@@ -29,6 +29,11 @@ public class PictureVO implements Serializable {
     private String name;
 
     /**
+     * 空间id
+     */
+    private Long spaceId;
+
+    /**
      * 简介
      */
     private String introduction;

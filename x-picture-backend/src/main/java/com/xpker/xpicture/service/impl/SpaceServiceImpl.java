@@ -117,7 +117,7 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
         SpaceLevelEnum spaceLevelEnum = SpaceLevelEnum.getEnumByValue(spaceLevel);
         // 要创建
         if (add) {
-            if (StrUtil.isNotBlank(spaceName)) {
+            if (StrUtil.isBlank(spaceName)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "空间名称不能为空");
             }
             if (spaceLevel == null) {

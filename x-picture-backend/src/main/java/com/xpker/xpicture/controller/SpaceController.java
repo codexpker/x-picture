@@ -164,7 +164,7 @@ public class SpaceController {
      */
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Page<Space>> listPictureByPage(@RequestBody SpaceQueryRequest spaceQueryRequest){
+    public BaseResponse<Page<Space>> listSpaceByPage(@RequestBody SpaceQueryRequest spaceQueryRequest){
         long current = spaceQueryRequest.getCurrent();
         long pageSize = spaceQueryRequest.getPageSize();
         Page<Space> spacePage = spaceService.page(new Page<>(current, pageSize), spaceService.getQueryWrapper(spaceQueryRequest));

@@ -4,9 +4,13 @@
       <a-layout-header class="header">
         <NavBar />
       </a-layout-header>
-      <a-layout-content class="content">
-        <router-view />
-      </a-layout-content>
+      <a-layout>
+        <Sider />
+        <a-layout-content class="content">
+          <router-view />
+        </a-layout-content>
+      </a-layout>
+
       <a-layout-footer class="footer">Copyright© by xpker</a-layout-footer>
     </a-layout>
   </div>
@@ -14,7 +18,7 @@
 
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue'
-
+import Sider from '@/components/Sider.vue'
 </script>
 
 <style scoped>
@@ -30,18 +34,23 @@ import NavBar from '@/components/NavBar.vue'
 
 #basicLayout .content {
   background: linear-gradient(to right, #fefefe, #fff);
-  padding: 20px;
+  padding: 28px;
   margin-bottom: 30px;
+}
+
+#basicLayout :deep(.ant-menu-root){
+  border-bottom: none !important;
+  border-inline-end: none !important;
 }
 
 #basicLayout .header {
   background: white;
   color: unset;
-  margin-bottom: 16px;
+  margin-bottom: 1px;
   padding-inline: 20px;
 }
 
-#basicLayout{
+#basicLayout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;

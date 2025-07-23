@@ -30,6 +30,12 @@
               </a-space>
               <template #overlay>
                 <a-menu>
+                  <a-menu-item>
+                    <router-link to="/my_space">
+                      <UserOutlined />
+                      我的空间
+                    </router-link>
+                  </a-menu-item>
                   <a-menu-item @click="doLogout">
                     <LogoutOutlined />
                     退出登录
@@ -45,7 +51,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, h, ref } from 'vue'
-import { LogoutOutlined, HomeOutlined } from '@ant-design/icons-vue'
+import { LogoutOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { MenuProps, message } from 'ant-design-vue'
 
 import { useRouter } from 'vue-router'
@@ -73,12 +79,12 @@ const routeItemToMenu = (item: any) => {
 // 过滤菜单项
 const items = computed(() => {
   const filtered = routes.filter((item) => {
-    if(item.meta?.hideInMenu) return false
+    if (item.meta?.hideInMenu) return false
     return checkAccess(loginUserStore.loginUser, item.meta?.access as string)
   })
 
   // 找到主页
-  const homeIndex = filtered.findIndex(item => item.path === '/')
+  const homeIndex = filtered.findIndex((item) => item.path === '/')
   if (homeIndex > 0) {
     // 如果主页不在第一位，则调整到第一位
     const [homeItem] = filtered.splice(homeIndex, 1)

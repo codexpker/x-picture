@@ -29,52 +29,26 @@
         @search="doSearch"
       />
     </div>
-    <a-list
-      :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 6 }"
-      :data-source="dataList"
-      :pagination="pagination"
-      :loading="loading"
-    >
-      <template #renderItem="{ item: picture }">
-        <a-list-item style="padding: 0">
-          <a-card hoverable style="width: 240px" @click="doClickPicture(picture)">
-            <template #cover>
-              <img
-                :alt="picture.name"
-                :src="picture.thumbnailUrl ?? picture.url"
-                style="height: 180px; object-fit: cover"
-              />
-            </template>
-            <a-card-meta :title="picture.name">
-              <template #avatar>
-                <a-avatar :src="picture.userVO?.userAvatar" />
-              </template>
-            </a-card-meta>
-            <div style="margin-top: 12px">
-              <a-flex wrap="wrap" gap="small">
-                <a-tag color="green" v-if="picture.category">
-                  {{ picture.category }}
-                </a-tag>
-                <a-tag v-for="tag in picture.tags" :key="tag" color="blue">
-                  {{ tag }}
-                </a-tag>
-              </a-flex>
-            </div>
-          </a-card>
-        </a-list-item>
-      </template>
-    </a-list>
+    <!-- 图片列表 -->
+    <PictureList :dataList="dataList" :loading="loading" />
+    <a-pagination
+      style="text-align: right"
+      :current="searchParams.current"
+      :pageSize="searchParams.pageSize"
+      :total="total"
+      @change="onPageChange"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 // 定义数据
-import { computed, onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { listPictureTagCategory, listPictureVoByPage } from '@/api/pictureController.ts'
 import { message } from 'ant-design-vue'
-import { useRouter } from 'vue-router'
+import PictureList from '@/components/PictureList.vue'
 
-const dataList = ref<API.PictureVO>([])
+const dataList = ref<API.PictureVO[]>([])
 const total = ref(0)
 const loading = ref(false)
 // 定义被选中的分类(默认全部)
@@ -96,13 +70,6 @@ const getTagCategoryOptions = async () => {
     message.error('加载分类标签失败' + res.data.message)
   }
 }
-const router =  useRouter()
-// 跳转到标签页
-const doClickPicture = (picture) => {
-  router.push({
-    path: `/picture/${picture.id}`
-  })
-}
 
 //搜索条件
 const searchParams = reactive<API.PictureQueryRequest>({
@@ -119,12 +86,12 @@ const fetchData = async () => {
     ...searchParams,
     tags: [],
   }
-  if(selectedCategory.value !== 'all') {
+  if (selectedCategory.value !== 'all') {
     params.category = selectedCategory.value
   }
   // 选中的标签为[true, false, false, true]形式，要转换
   selectedTagList.value.forEach((useTag, index) => {
-    if(useTag){
+    if (useTag) {
       params.tags.push(tagList.value[index])
     }
   })
@@ -139,19 +106,11 @@ const fetchData = async () => {
 }
 
 // 分页参数
-// 设置分页器，利用computed动态计算
-const pagination = computed(() => {
-  return {
-    current: searchParams.current ?? 1,
-    pageSize: searchParams.pageSize ?? 12,
-    total: total.value,
-    onChange: (page, pageSize) => {
-      searchParams.current = page
-      searchParams.pageSize = pageSize
-      fetchData()
-    },
-  }
-})
+const onPageChange = (page: number, pageSize: number) => {
+  searchParams.current = page
+  searchParams.pageSize = pageSize
+  fetchData()
+}
 
 // 点击搜索按钮，触发搜索事件
 const doSearch = () => {
@@ -173,7 +132,8 @@ onMounted(() => {
   margin: 0 auto;
   margin-bottom: 16px;
 }
-#homePage .tag-bar{
-  margin-bottom:  16px;
+
+#homePage .tag-bar {
+  margin-bottom: 16px;
 }
 </style>
